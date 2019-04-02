@@ -3,6 +3,7 @@ package com.devdemo.angular.angulardemo;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,13 +27,11 @@ public class AngulardemoApplication {
     @Bean
     ApplicationRunner init(CarRepository repository) {
         return args -> {
-//            Stream.of("Ferrari", "Jaguar", "Porsche", "Lamborghini", "Bugatti",
-//                    "AMC Gremlin", "Triumph Stag", "Ford Pinto", "Yugo GV").forEach(name -> {
-//                Car car = new Car();
-//                car.setName(name);
-//                repository.save(car);
-//            });
-//            repository.findAll().forEach(System.out::println);
+                List<Car> carList = repository.findAll();
+                if (carList != null && !carList.isEmpty()){
+                    repository.deleteAll();
+                    System.out.println("Deleted all rows..");
+                }
 
                 Reader reader = Files.newBufferedReader(Paths.get("/Users/devshreeg/angularApps/Cars.csv"));
                 CsvToBean<Car> csvToBean = new CsvToBeanBuilder(reader)
